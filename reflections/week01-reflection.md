@@ -10,7 +10,7 @@
 <!-- Paste a link to your commits for this week. The easiest way: go to your repo on GitHub,
      click "commits", and copy the URL after filtering by your name or branch. -->
 
-**Link:** https://github.com/DannyKin/media-tracker-android/blob/week-01/app/src/main/java/edu/metrostate/ics342/mediatracker/MainActivity.kt
+**Link:** https://github.com/DannyKin/media-tracker-android/tree/week-01
 
 
 ---
