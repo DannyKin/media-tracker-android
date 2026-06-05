@@ -10,9 +10,9 @@
 <!-- Paste a link to your commits for this week. The easiest way: go to your repo on GitHub,
      click "commits", and copy the URL after filtering by your name or branch. -->
 
-**Link:**
+**Link:** https://github.com/DannyKin/media-tracker-android/pull/3/changes
 
----
+--- 
 
 ## Code Review
 
@@ -20,26 +20,26 @@
      Part 1 is the link — I will verify the review exists on GitHub.
      Part 2 is your written assessment — what you actually looked at and what you found. -->
 
-**Reviewed:** *(pod mate's name)*
-**Link to my review:**
+**Reviewed:** *(pod mate's name)* Hunter Bammert-Mueller
+**Link to my review:** https://github.com/Hunterbounty11/media-tracker-android/pull/3/changes
 
 ### What I Looked At
 
 <!-- Walk through the code you reviewed. What was the PR trying to do? Which files or
-     functions did you focus on? -->
+     functions did you focus on? --> I look at his register screen and register view model page to see how he added the text boxes to the register screen without any problem. 
 
 ### What I Noticed
 
 <!-- Be specific. Did you spot a potential bug? A pattern that could cause problems? Something
      done well that you want to call out? "I looked at the ViewModel and everything seemed fine"
-     is not specific enough. Name the thing you noticed and explain why it matters. -->
+     is not specific enough. Name the thing you noticed and explain why it matters. --> I noticed that he is almost caught up to the rest of the class in terms of getting everything to work. All he needs is to complete the authmodel file and he is there.
 
 ### Comments I Left
 
 <!-- Briefly summarize the comments you left on the PR. If you left a positive comment,
      say what it was. If you left a suggestion, say what you suggested and why. -->
 
----
+--- I said great work on completing the register screen and all the text boxes and button. 
 
 ## One Thing I Understood More Deeply
 
