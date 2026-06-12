@@ -1,27 +1,21 @@
 # Week {{04}} Reflection
 
 **Name:** Danny King
-**Date:**
+**Date:** 06/11/2026
 
 ---
 
 ## Commits This Week
 
-<!-- Paste a link to your commits for this week. The easiest way: go to your repo on GitHub,
-     click "commits", and copy the URL after filtering by your name or branch. -->
 
-**Link:**
+**Link:** https://github.com/Hunterbounty11/media-tracker-android/pull/4
 
 ---
 
 ## Code Review
 
-<!-- Every week you leave a review on a pod mate's pull request. Fill in both parts below.
-     Part 1 is the link — I will verify the review exists on GitHub.
-     Part 2 is your written assessment — what you actually looked at and what you found. -->
-
 **Reviewed:** *(pod mate's name)*
-**Link to my review:**
+**Link to my review:** https://github.com/Hunterbounty11/media-tracker-android/pull/4
 
 ### What I Looked At
 
