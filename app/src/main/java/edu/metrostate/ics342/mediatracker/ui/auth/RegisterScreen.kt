@@ -26,7 +26,8 @@ import edu.metrostate.ics342.mediatracker.theme.MediaTrackerTheme
 @Composable
 fun RegisterScreen(
     onRegisterSuccess: () -> Unit,
-    onNavigateToLogin: () -> Unit
+    onNavigateToLogin: () -> Unit,
+    viewModel: RegisterViewModel = viewModel()
 ) {
     var displayName     by remember { mutableStateOf("") }
     var email           by remember { mutableStateOf("") }
@@ -209,5 +210,39 @@ fun RegisterScreenPreview() {
             onRegisterSuccess = {},
             onNavigateToLogin = {}
         )
+        TextField(
+            state = TextFieldState(),
+            )
+        TextField(
+            state = TextFieldState(),
+
+            )
+        SecureTextField(
+            state = TextFieldState(),
+            modifier = Modifier,
+            placeholder = {
+                Text("Password")
+            }
+
+            )
+        SecureTextField(
+            state = TextFieldState(),
+            placeholder ={
+                Text("Confirm Password")
+            }
+
+            )
+        Button( {
+            viewModel.onSignupClicked()
+        }) {
+            Text("Sign Up")
+        }
+
     }
+}
+
+@Composable
+@Preview(showSystemUi = true)
+fun RegisterScreenPreview() {
+    RegisterScreen({}, {})
 }
