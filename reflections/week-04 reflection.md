@@ -8,47 +8,34 @@
 ## Commits This Week
 
 
-**Link:** https://github.com/Hunterbounty11/media-tracker-android/pull/4
+**Link:** https://github.com/DannyKin/media-tracker-android/pull/4
 
 ---
 
 ## Code Review
 
-**Reviewed:** *(pod mate's name)*
+**Reviewed:** * Hunter Bammert-Mueller*
 **Link to my review:** https://github.com/Hunterbounty11/media-tracker-android/pull/4
 
 ### What I Looked At
 
-<!-- Walk through the code you reviewed. What was the PR trying to do? Which files or
-     functions did you focus on? -->
+I looked at all the codes they did with you and compare it to mine to see what I was missing. I mainly focused on the registration screen because I'm not done with that yet.
 
 ### What I Noticed
 
-<!-- Be specific. Did you spot a potential bug? A pattern that could cause problems? Something
-     done well that you want to call out? "I looked at the ViewModel and everything seemed fine"
-     is not specific enough. Name the thing you noticed and explain why it matters. -->
+I was mostly focus on their register screen because mine wasn't working so when I'm done with mine then I will be able to spot the problem with their code.
 
 ### Comments I Left
 
-<!-- Briefly summarize the comments you left on the PR. If you left a positive comment,
-     say what it was. If you left a suggestion, say what you suggested and why. -->
-
----
+The comments I left were mostly about them completing the code in class compare to me who didn't. I also ask them if it worked so I can check with them if I make a mistake.
 
 ## One Thing I Understood More Deeply
 
-<!-- Be specific. Don't write "I learned about ViewModels." Write what specifically clicked —
-     what was confusing before, what made it make sense, and how you'd explain it to someone else.
-     There are no wrong answers here. -->
-
----
+One thing I understood deeply was the way the createUser and token are supposed to work but there's always room to learn more. 
 
 ## One Thing I'm Still Confused About
 
-<!-- Be honest. This is the most useful part of the reflection for me — it tells me where to
-     spend more time in class. You will not lose points for being confused. -->
-
----
+I'm still confused on the register screen, so I'm going to spend some time during the week understand it and getting it to work for me. 
 
 ## Anything Else *(optional)*
 
