@@ -1,5 +1,6 @@
 package edu.metrostate.ics342.mediatracker.navigation
 
+import android.net.Uri
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -22,12 +23,14 @@ import edu.metrostate.ics342.mediatracker.ui.profile.EditProfileScreen
 import edu.metrostate.ics342.mediatracker.ui.profile.MyProfileScreen
 import edu.metrostate.ics342.mediatracker.ui.profile.UserProfileScreen
 import edu.metrostate.ics342.mediatracker.ui.review.WriteReviewScreen
+import edu.metrostate.ics342.mediatracker.ui.search.SearchResultsScreen
 import edu.metrostate.ics342.mediatracker.ui.search.SearchScreen
 import edu.metrostate.ics342.mediatracker.ui.settings.SettingsScreen
 
 private val bottomNavRoutes = setOf(
     Routes.ACTIVITY_FEED,
     Routes.SEARCH,
+    Routes.SEARCH_RESULTS,
     Routes.LIBRARY,
     Routes.CONNECTIONS,
     Routes.MY_PROFILE,
@@ -50,9 +53,17 @@ fun MediaTrackerNavGraph(navController: NavHostController) {
             startDestination = Routes.LOGIN,
             modifier         = Modifier.padding(innerPadding)
         ) {
-            composable(Routes.LOGIN) {
+            composable(
+                route     = "${Routes.LOGIN}?registered={registered}",
+                arguments = listOf(navArgument("registered") {
+                    type         = NavType.BoolType
+                    defaultValue = false
+                })
+            ) { backStackEntry ->
+                val showRegistrationSuccess = backStackEntry.arguments?.getBoolean("registered") ?: false
                 LoginScreen(
-                    onLoginSuccess       = {
+                    showRegistrationSuccess = showRegistrationSuccess,
+                    onLoginSuccess          = {
                         navController.navigate(Routes.ACTIVITY_FEED) {
                             popUpTo(Routes.LOGIN) { inclusive = true }
                         }
@@ -64,7 +75,7 @@ fun MediaTrackerNavGraph(navController: NavHostController) {
             composable(Routes.REGISTER) {
                 RegisterScreen(
                     onRegisterSuccess = {
-                        navController.navigate(Routes.ACTIVITY_FEED) {
+                        navController.navigate("${Routes.LOGIN}?registered=true") {
                             popUpTo(Routes.LOGIN) { inclusive = true }
                         }
                     },
@@ -81,6 +92,24 @@ fun MediaTrackerNavGraph(navController: NavHostController) {
 
             composable(Routes.SEARCH) {
                 SearchScreen(
+                    onSearch = { query ->
+                        navController.navigate("search_results?query=${Uri.encode(query)}")
+                    },
+                    onMediaClick = { mediaId -> navController.navigate("media_detail/$mediaId") }
+                )
+            }
+
+            composable(
+                route = Routes.SEARCH_RESULTS,
+                arguments = listOf(navArgument("query") {
+                    type         = NavType.StringType
+                    defaultValue = ""
+                })
+            ) { backStackEntry ->
+                val query = backStackEntry.arguments?.getString("query") ?: ""
+                SearchResultsScreen(
+                    initialQuery = query,
+                    onBack       = { navController.popBackStack() },
                     onMediaClick = { mediaId -> navController.navigate("media_detail/$mediaId") }
                 )
             }
@@ -91,11 +120,15 @@ fun MediaTrackerNavGraph(navController: NavHostController) {
                 )
             }
 
-            composable(route = Routes.MEDIA_DETAIL) {
+            composable(
+                route     = Routes.MEDIA_DETAIL,
+                arguments = listOf(navArgument("mediaId") { type = NavType.IntType })
+            ) { backStackEntry ->
+                val mediaId = backStackEntry.arguments?.getInt("mediaId") ?: return@composable
                 MediaDetailScreen(
-                    mediaId        = -1,
+                    mediaId        = mediaId,
                     onNavigateBack = { navController.popBackStack() },
-                    onWriteReview  = { mediaId -> navController.navigate("write_review/$mediaId") }
+                    onWriteReview  = { id -> navController.navigate("write_review/$id") }
                 )
             }
 

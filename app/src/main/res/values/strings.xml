@@ -7,6 +7,9 @@
     <!-- Auth -->
     <string name="email_label">Email</string>
     <string name="password_label">Password</string>
+    <string name="display_name_label">Display Name</string>
+    <string name="username_label">Username</string>
+    <string name="confirm_password_label">Confirm Password</string>
     <string name="sign_in_button">Sign In</string>
     <string name="name_label">Display Name</string>
     <string name="user_label">Username</string>
@@ -73,6 +76,11 @@
     <string name="settings_email_label">Email</string>
     <string name="settings_change_password">Change password</string>
     <string name="settings_dark_mode">Dark mode</string>
+
+    <!-- Search -->
+    <string name="search_hint">Search books, movies, shows…</string>
+    <string name="search_popular_this_week">Popular This Week</string>
+    <string name="search_results_count">%1$d results</string>
 
     <!-- Stubs -->
     <string name="search_not_implemented">Search is not implemented yet.</string>
