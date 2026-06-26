@@ -9,10 +9,7 @@ import retrofit2.Retrofit
 
 object RetrofitInstance {
 
-    private val json = Json {
-        ignoreUnknownKeys = true
-        encodeDefaults    = true
-    }
+    private val json = Json { ignoreUnknownKeys = true }
 
     private val client = OkHttpClient.Builder()
         .addInterceptor(HttpLoggingInterceptor().apply {
