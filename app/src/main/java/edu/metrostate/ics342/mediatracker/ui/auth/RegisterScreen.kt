@@ -20,7 +20,6 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import edu.metrostate.ics342.mediatracker.R
 import edu.metrostate.ics342.mediatracker.theme.MediaTrackerTheme
 
@@ -30,34 +29,37 @@ fun RegisterScreen(
     onNavigateToLogin: () -> Unit,
     viewModel: RegisterViewModel = viewModel()
 ) {
-    val displayName     by viewModel.displayName.collectAsState()
-    val email           by viewModel.email.collectAsState()
-    val username        by viewModel.username.collectAsState()
-    val password        by viewModel.password.collectAsState()
-    val confirmPassword by viewModel.confirmPassword.collectAsState()
-    val registerState   by viewModel.registerState.collectAsState()
+    var displayName     by remember { mutableStateOf("") }
+    var email           by remember { mutableStateOf("") }
+    var username        by remember { mutableStateOf("") }
+    var password        by remember { mutableStateOf("") }
+    var confirmPassword by remember { mutableStateOf("") }
+    var errorMessage    by remember { mutableStateOf<String?>(null) }
 
     val focusManager = LocalFocusManager.current
     val scrollState  = rememberScrollState()
 
-    LaunchedEffect(registerState) {
-        if (registerState is RegisterViewModel.RegisterUiState.Success) {
-            viewModel.resetRegisterState()
-            onRegisterSuccess()
+    fun attemptRegister() {
+        focusManager.clearFocus()
+        when {
+            displayName.isBlank() || email.isBlank() || username.isBlank() ||
+                    password.isBlank()    || confirmPassword.isBlank() -> {
+                errorMessage = "Please fill in all fields."
+            }
+            password != confirmPassword -> {
+                errorMessage = "Passwords do not match."
+            }
+            else -> onRegisterSuccess()
         }
     }
-
-    val isLoading = registerState is RegisterViewModel.RegisterUiState.Loading
-    val errorMsg  = (registerState as? RegisterViewModel.RegisterUiState.Error)
-        ?.msgResId?.let { stringResource(it) }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = 24.dp)
             .verticalScroll(scrollState),
-        verticalArrangement   = Arrangement.Center,
-        horizontalAlignment   = Alignment.CenterHorizontally
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Icon(
             imageVector        = Icons.Filled.SmartDisplay,
@@ -86,10 +88,11 @@ fun RegisterScreen(
         Spacer(Modifier.height(40.dp))
 
         OutlinedTextField(
-            value           = displayName,
-            onValueChange   = viewModel::onDisplayNameChange,
-            label           = { Text(stringResource(R.string.display_name_label)) },
-            singleLine      = true,
+            value         = displayName,
+            onValueChange = { displayName = it; errorMessage = null },
+            // Workaround: Hardcoding label because R.string.display_name_label is currently unresolved by the Preview engine
+            label         = { Text("Display Name") },
+            singleLine    = true,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text,
                 imeAction    = ImeAction.Next
@@ -103,10 +106,10 @@ fun RegisterScreen(
         Spacer(Modifier.height(12.dp))
 
         OutlinedTextField(
-            value           = email,
-            onValueChange   = viewModel::onEmailChange,
-            label           = { Text(stringResource(R.string.email_label)) },
-            singleLine      = true,
+            value         = email,
+            onValueChange = { email = it; errorMessage = null },
+            label         = { Text(stringResource(R.string.email_label)) },
+            singleLine    = true,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Email,
                 imeAction    = ImeAction.Next
@@ -120,10 +123,10 @@ fun RegisterScreen(
         Spacer(Modifier.height(12.dp))
 
         OutlinedTextField(
-            value           = username,
-            onValueChange   = viewModel::onUsernameChange,
-            label           = { Text(stringResource(R.string.username_label)) },
-            singleLine      = true,
+            value         = username,
+            onValueChange = { username = it; errorMessage = null },
+            label         = { Text(stringResource(R.string.username_label)) },
+            singleLine    = true,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text,
                 imeAction    = ImeAction.Next
@@ -138,7 +141,7 @@ fun RegisterScreen(
 
         OutlinedTextField(
             value                = password,
-            onValueChange        = viewModel::onPasswordChange,
+            onValueChange        = { password = it; errorMessage = null },
             label                = { Text(stringResource(R.string.password_label)) },
             singleLine           = true,
             visualTransformation = PasswordVisualTransformation(),
@@ -156,8 +159,9 @@ fun RegisterScreen(
 
         OutlinedTextField(
             value                = confirmPassword,
-            onValueChange        = viewModel::onConfirmPasswordChange,
-            label                = { Text(stringResource(R.string.confirm_password_label)) },
+            onValueChange        = { confirmPassword = it; errorMessage = null },
+            // Workaround: Hardcoding label because R.string.confirm_password_label is currently unresolved by the Preview engine
+            label                = { Text("Confirm Password") },
             singleLine           = true,
             visualTransformation = PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(
@@ -165,15 +169,15 @@ fun RegisterScreen(
                 imeAction    = ImeAction.Done
             ),
             keyboardActions = KeyboardActions(
-                onDone = { focusManager.clearFocus(); viewModel.onRegisterClick() }
+                onDone = { attemptRegister() }
             ),
             modifier = Modifier.fillMaxWidth()
         )
 
-        if (errorMsg != null) {
+        if (errorMessage != null) {
             Spacer(Modifier.height(8.dp))
             Text(
-                errorMsg,
+                errorMessage!!,
                 color = MaterialTheme.colorScheme.error,
                 style = MaterialTheme.typography.bodySmall
             )
@@ -182,21 +186,12 @@ fun RegisterScreen(
         Spacer(Modifier.height(24.dp))
 
         Button(
-            onClick  = { focusManager.clearFocus(); viewModel.onRegisterClick() },
-            enabled  = !isLoading,
+            onClick  = { attemptRegister() },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(48.dp)
         ) {
-            if (isLoading) {
-                CircularProgressIndicator(
-                    modifier    = Modifier.size(20.dp),
-                    strokeWidth = 2.dp,
-                    color       = MaterialTheme.colorScheme.onPrimary
-                )
-            } else {
-                Text(stringResource(R.string.sign_up_button))
-            }
+            Text(stringResource(R.string.sign_up_button))
         }
 
         Spacer(Modifier.height(16.dp))
@@ -215,5 +210,39 @@ fun RegisterScreenPreview() {
             onRegisterSuccess = {},
             onNavigateToLogin = {}
         )
+        TextField(
+            state = TextFieldState(),
+            )
+        TextField(
+            state = TextFieldState(),
+
+            )
+        SecureTextField(
+            state = TextFieldState(),
+            modifier = Modifier,
+            placeholder = {
+                Text("Password")
+            }
+
+            )
+        SecureTextField(
+            state = TextFieldState(),
+            placeholder ={
+                Text("Confirm Password")
+            }
+
+            )
+        Button( {
+            viewModel.onSignupClicked()
+        }) {
+            Text("Sign Up")
+        }
+
     }
+}
+
+@Composable
+@Preview(showSystemUi = true)
+fun RegisterScreenPreview() {
+    RegisterScreen({}, {})
 }
