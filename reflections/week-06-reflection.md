@@ -35,7 +35,7 @@ I understood how the search works in this project. The search is more like a fil
 
 ## One Thing I'm Still Confused About
 
-I'm still confused about the Api and how it works on this project. I'm having problem with the BuildConfig feature in my ApiConstants, so I'm so confused about it right now.
+I'm still confused about the Api and how it works on this project. I'm having problem with the BuildConfig feature in my ApiConstants, so I'm so confused about it right now. I'm going to spend the weekend fixing all my errors so I can have it running next class.
 
 ## Anything Else *(optional)*
 
