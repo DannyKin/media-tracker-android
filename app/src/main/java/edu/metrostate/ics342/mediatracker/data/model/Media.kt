@@ -2,7 +2,10 @@ package edu.metrostate.ics342.mediatracker.data.model
 
 import android.content.Context
 import edu.metrostate.ics342.mediatracker.R
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class Media(
     val id: Int,
     val mediaType: String, // "book", "movie", or "show"
@@ -15,8 +18,18 @@ data class Media(
     val publishedYear: Int? = null,
     val averageRating: Float = 0f,
     val ratingCount: Int = 0,
-    val genres: List<String> = emptyList()
-)
+    val genres: List<String> = emptyList(),
+    val description: String? = null,
+    val pageCount: Int? = null,
+    val runtimeMinutes: Int? = null,
+    val seasonCount: Int? = null,
+    val episodeCount: Int? = null,
+    val isbn: String? = null,
+    val reviewCount: Int = 0
+){
+    companion object{
+    }
+}
 
 /** Returns a human-readable credit line appropriate for the media type. */
 fun Media.creatorCredit(context: Context): String = when (mediaType) {
