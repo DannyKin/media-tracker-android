@@ -62,7 +62,6 @@ fun MediaDetailScreen(
         val placeholder = when (detail.mediaType) {
             "book" -> R.drawable.menu_book_24px
             "movie" -> R.drawable.movie_24px
-            "show" -> R.drawable.show_24px
             else -> R.drawable.tv_24px
         }
         Box(
