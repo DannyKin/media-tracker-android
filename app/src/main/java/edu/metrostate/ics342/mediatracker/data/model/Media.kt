@@ -2,7 +2,6 @@ package edu.metrostate.ics342.mediatracker.data.model
 
 import android.content.Context
 import edu.metrostate.ics342.mediatracker.R
-import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 
 @Serializable
