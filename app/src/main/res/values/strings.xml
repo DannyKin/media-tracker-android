@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Media Tracker</string>
     <string name="app_tagline">Track what you read, watch, and discover.</string>
+    <string name="register_name">Create Account</string>
+    <string name="register_tagline">Join the community</string>
 
     <!-- Auth -->
     <string name="email_label">Email</string>

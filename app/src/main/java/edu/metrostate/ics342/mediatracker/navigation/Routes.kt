@@ -1,5 +1,6 @@
 package edu.metrostate.ics342.mediatracker.navigation
 
+
 object Routes {
     const val LOGIN         = "login"
     const val REGISTER      = "register"
