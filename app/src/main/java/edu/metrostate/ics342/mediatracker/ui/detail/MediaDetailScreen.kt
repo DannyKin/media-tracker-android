@@ -48,7 +48,7 @@ fun MediaDetailScreen(
     onWriteReview: (Int) -> Unit,
     reviewRepository: FakeMediaRepository
 ) {
-    // Not wired to the API yet — show the hardcoded MediaDetail sample.
+    // Not wired to the API yet — show the hardcoded MediaDetail sample.bnkk
     val detail = FakeMediaRepository.sampleMediaDetail
 //    val reviews = FakeMediaRepository.sampleReviews
 
