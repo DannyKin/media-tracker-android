@@ -2,10 +2,12 @@ package edu.metrostate.ics342.mediatracker.data.network
 
 import edu.metrostate.ics342.mediatracker.data.model.LibraryItem
 import edu.metrostate.ics342.mediatracker.data.model.Media
+import edu.metrostate.ics342.mediatracker.data.model.MediaDetail
+import edu.metrostate.ics342.mediatracker.data.model.Review
+import edu.metrostate.ics342.mediatracker.data.model.Favorite
+import edu.metrostate.ics342.mediatracker.data.model.AddFavoriteRequest
 import retrofit2.Response
-import retrofit2.http.Path
-import retrofit2.http.GET
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface MediaApiService {
     @GET("media")
@@ -16,10 +18,21 @@ interface MediaApiService {
         @Query("after") after: String? = null
     ): Response<List<Media>>
 
-    @GET("media/{media_id}")
-    suspend fun getMedia(@Path(value="media_id") mediaID: Int) : Response<Media>
+    @GET("media/{id}")
+    suspend fun getMediaDetail(@Path("id") id: Int): Response<MediaDetail>
 
     @GET("library/{mediaId}")
-    suspend fun checkLibrary(@Path("mediaId") mediaId: Int): Response<LibraryItem>
-}
+    suspend fun getLibraryItem(@Path("mediaId") mediaId: Int): Response<LibraryItem>
 
+    @POST("library")
+    suspend fun addToLibrary(@Body body: AddToLibraryRequest): Response<LibraryItem>
+
+    @GET("reviews")
+    suspend fun getReviews(@Query("mediaId") mediaId: Int): Response<List<Review>>
+
+    @GET("favorites/{mediaId}")
+    suspend fun getFavorite(@Path("mediaId") mediaId: Int): Response<Favorite>
+
+    @POST("favorites")
+    suspend fun addFavorite(@Body body: AddFavoriteRequest): Response<Favorite>
+}
