@@ -1,65 +1,40 @@
-# Week {{N}} Reflection
+# Week 10 Reflection
 
-**Name:**
-**Date:**
+**Name:** Danny King
+**Date:** 07/23/2026
 
----
 
 ## Commits This Week
 
-<!-- Paste a link to your commits for this week. The easiest way: go to your repo on GitHub,
-     click "commits", and copy the URL after filtering by your name or branch. -->
+**Link:**  https://github.com/DannyKin/media-tracker-android/pull/9
 
-**Link:**
-
----
 
 ## Code Review
 
-<!-- Every week you leave a review on a pod mate's pull request. Fill in both parts below.
-     Part 1 is the link — I will verify the review exists on GitHub.
-     Part 2 is your written assessment — what you actually looked at and what you found. -->
-
-**Reviewed:** *(pod mate's name)*
-**Link to my review:**
+**Reviewed:** Khalid Hassan
+**Link to my review:** https://github.com/Khalid-H634/media-tracker-android/pull/9
 
 ### What I Looked At
 
-<!-- Walk through the code you reviewed. What was the PR trying to do? Which files or
-     functions did you focus on? -->
+I reviewed the favorite code that we worked on in class. I mainly focused on his FavoriteAPIServices file because I was wondering why he didn't do it in his MediaApi Services files like everyone else.
 
 ### What I Noticed
 
-<!-- Be specific. Did you spot a potential bug? A pattern that could cause problems? Something
-     done well that you want to call out? "I looked at the ViewModel and everything seemed fine"
-     is not specific enough. Name the thing you noticed and explain why it matters. -->
+A bug I noticed was in his ApiConstant file and him showing his api client id and client secret. He added a const before the val so it showed his client id and secret.
 
 ### Comments I Left
 
-<!-- Briefly summarize the comments you left on the PR. If you left a positive comment,
-     say what it was. If you left a suggestion, say what you suggested and why. -->
-
----
+I talked about his ApiConstant showing his client id and secrets and also his him creating a favoriteApiServices when he could have put it in the mediaApiServices. 
 
 ## One Thing I Understood More Deeply
 
-<!-- Be specific. Don't write "I learned about ViewModels." Write what specifically clicked —
-     what was confusing before, what made it make sense, and how you'd explain it to someone else.
-     There are no wrong answers here. -->
-
----
+I understood how to change the "want to" to "save" in the library. If the User clicks button, the request is sent to server, then we wait, if Server says success then the screen update.
 
 ## One Thing I'm Still Confused About
 
-<!-- Be honest. This is the most useful part of the reflection for me — it tells me where to
-     spend more time in class. You will not lose points for being confused. -->
-
----
+I'm confused about the second part of class the removing item from library. I know the item disappear from the library but is it possible to call it again.
 
 ## Anything Else *(optional)*
-
-<!-- Did you help a pod mate work through something? Did you discover something cool or frustrating?
-     Did something from a previous week finally click? This is a good place to put it. -->
 
 ---
 
