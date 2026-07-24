@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Media(
     val id: Int,
-    val mediaType: String, // "book", "movie", or "show"
+    val mediaType: MediaType,
     val title: String,
     val author: String? = null,       // books
     val director: String? = null,     // movies
@@ -17,23 +17,12 @@ data class Media(
     val publishedYear: Int? = null,
     val averageRating: Float = 0f,
     val ratingCount: Int = 0,
-    val genres: List<String> = emptyList(),
-    val description: String? = null,
-    val pageCount: Int? = null,
-    val runtimeMinutes: Int? = null,
-    val seasonCount: Int? = null,
-    val episodeCount: Int? = null,
-    val isbn: String? = null,
-    val reviewCount: Int = 0
-){
-    companion object{
-    }
-}
-
+    val genres: List<String> = emptyList()
+)
 /** Returns a human-readable credit line appropriate for the media type. */
 fun Media.creatorCredit(context: Context): String = when (mediaType) {
-    "book"  -> author   ?: context.getString(R.string.media_unknown_author)
-    "movie" -> director ?: context.getString(R.string.media_unknown_director)
-    "show"  -> creator  ?: context.getString(R.string.media_unknown_creator)
-    else    -> ""
+    MediaType.BOOK    -> author   ?: context.getString(R.string.media_unknown_author)
+    MediaType.MOVIE   -> director ?: context.getString(R.string.media_unknown_director)
+    MediaType.SHOW    -> creator  ?: context.getString(R.string.media_unknown_creator)
+    MediaType.UNKNOWN -> ""
 }

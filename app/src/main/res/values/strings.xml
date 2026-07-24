@@ -2,7 +2,6 @@
     <string name="app_name">Media Tracker</string>
     <string name="app_tagline">Track what you read, watch, and discover.</string>
     <string name="register_name">Create Account</string>
-    <string name="register_tagline">Join the community</string>
 
     <!-- Auth -->
     <string name="email_label">Email</string>
@@ -118,6 +117,9 @@
     <string name="detail_stat_seasons">Seasons</string>
     <string name="detail_stat_genre">Genre</string>
     <string name="detail_runtime_minutes">%1$d min</string>
+    <string name="detail_retry">Try Again</string>
+    <string name="detail_not_found">This media item could not be found.</string>
+    <string name="saved">Saved</string>
 
     <!-- Media -->
     <string name="media_unknown_author">Unknown Author</string>

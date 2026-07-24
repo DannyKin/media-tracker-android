@@ -3,15 +3,16 @@ package edu.metrostate.ics342.mediatracker.data.network
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
+import edu.metrostate.ics342.mediatracker.data.SessionRepository
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 
-object RetrofitInstance {
+public object RetrofitInstance {
 
-    private val json = Json {
+    internal val json = Json {
         ignoreUnknownKeys = true
-        encodeDefaults = true
+        encodeDefaults    = true
     }
 
     private fun loggingInterceptor() = HttpLoggingInterceptor().apply {
@@ -38,5 +39,4 @@ object RetrofitInstance {
             .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
             .build()
             .create(MediaApiService::class.java)
-
 }
