@@ -9,10 +9,6 @@
 
 ## Code Review
 
-<!-- Every week you leave a review on a pod mate's pull request. Fill in both parts below.
-     Part 1 is the link — I will verify the review exists on GitHub.
-     Part 2 is your written assessment — what you actually looked at and what you found. -->
-
 **Reviewed:** Hunter Bammert-Mueller
 **Link to my review:** https://github.com/Hunterbounty11/media-tracker-android/pull/10
 
