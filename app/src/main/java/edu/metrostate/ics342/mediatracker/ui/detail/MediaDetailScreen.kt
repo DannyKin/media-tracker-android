@@ -8,6 +8,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.MoreVert
@@ -27,7 +28,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import edu.metrostate.ics342.mediatracker.R
-import edu.metrostate.ics342.mediatracker.data.model.LibraryStatus
 import edu.metrostate.ics342.mediatracker.data.model.MediaDetail
 import edu.metrostate.ics342.mediatracker.data.model.MediaType
 import edu.metrostate.ics342.mediatracker.data.model.Review
@@ -46,78 +46,109 @@ fun MediaDetailScreen(
     viewModel: MediaDetailViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val actionError by viewModel.actionError.collectAsState()
+
+    val actionMessage by viewModel.actionMessage.collectAsState()
+
+    val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(mediaId) { viewModel.load(mediaId) }
 
-    Column(modifier = Modifier.fillMaxSize()) {
-        TopAppBar(
-            title = {},
-            navigationIcon = {
-                IconButton(onClick = onNavigateBack) {
-                    Icon(
-                        Icons.AutoMirrored.Outlined.ArrowBack,
-                        contentDescription = stringResource(R.string.action_back)
-                    )
-                }
-            },
-            actions = {
-                IconButton(onClick = { /* TODO: overflow menu */ }) {
-                    Icon(
-                        Icons.Outlined.MoreVert,
-                        contentDescription = stringResource(R.string.action_more_options)
-                    )
-                }
-            }
-        )
+    LaunchedEffect(actionError) {
+        actionError?.let {
+            snackbarHostState.showSnackbar(it)
+            viewModel.clearActionError()
+        }
+    }
 
-        when (val state = uiState) {
-            is MediaDetailUiState.Loading -> {
-                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator()
-                }
-            }
+    LaunchedEffect(actionMessage) {
+        actionMessage?.let {
+            snackbarHostState.showSnackbar(it)
+            viewModel.clearActionMessage()
+        }
+    }
 
-            is MediaDetailUiState.NotFound -> {
-                Box(
-                    Modifier.fillMaxSize().padding(32.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text  = stringResource(R.string.detail_not_found),
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
+    Box(modifier = Modifier.fillMaxSize()) {
+        Column(modifier = Modifier.fillMaxSize()) {
+            TopAppBar(
+                title = {},
+                navigationIcon = {
+                    IconButton(onClick = onNavigateBack) {
+                        Icon(
+                            Icons.AutoMirrored.Outlined.ArrowBack,
+                            contentDescription = stringResource(R.string.action_back)
+                        )
+                    }
+                },
+                actions = {
+                    IconButton(onClick = { /* TODO: overflow menu */ }) {
+                        Icon(
+                            Icons.Outlined.MoreVert,
+                            contentDescription = stringResource(R.string.action_more_options)
+                        )
+                    }
                 }
-            }
+            )
 
-            is MediaDetailUiState.Error -> {
-                Box(
-                    Modifier.fillMaxSize().padding(32.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            when (val state = uiState) {
+                is MediaDetailUiState.Loading -> {
+                    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        CircularProgressIndicator()
+                    }
+                }
+
+                is MediaDetailUiState.NotFound -> {
+                    Box(
+                        Modifier
+                            .fillMaxSize()
+                            .padding(32.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
                         Text(
-                            text  = state.message,
+                            text  = stringResource(R.string.detail_not_found),
                             style = MaterialTheme.typography.bodyLarge,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
-                        Spacer(Modifier.height(16.dp))
-                        Button(onClick = { viewModel.load(mediaId) }) {
-                            Text(stringResource(R.string.detail_retry))
+                    }
+                }
+
+                is MediaDetailUiState.Error -> {
+                    Box(
+                        Modifier
+                            .fillMaxSize()
+                            .padding(32.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text(
+                                text  = state.message,
+                                style = MaterialTheme.typography.bodyLarge,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                            Spacer(Modifier.height(16.dp))
+                            Button(onClick = { viewModel.load(mediaId) }) {
+                                Text(stringResource(R.string.detail_retry))
+                            }
                         }
                     }
                 }
-            }
 
-            is MediaDetailUiState.Success -> {
-                SuccessContent(
-                    state         = state,
-                    onAddToLibrary = { viewModel.addToLibrary() },
-                    onSave = { viewModel.saveFavorite() },
-                    onWriteReview  = onWriteReview
-                )
+                is MediaDetailUiState.Success -> {
+                    SuccessContent(
+                        state           = state,
+                        onAddToLibrary  = { viewModel.addToLibrary() },
+                        onToggleFavorite = { viewModel.toggleFavorite() },
+                        onWriteReview   = onWriteReview,
+                        onSaveQuote = viewModel::saveQuote
+                    )
+                }
             }
         }
+
+        SnackbarHost(
+            hostState = snackbarHostState,
+            modifier  = Modifier.align(Alignment.BottomCenter)
+        )
     }
 }
 
@@ -125,8 +156,9 @@ fun MediaDetailScreen(
 private fun SuccessContent(
     state: MediaDetailUiState.Success,
     onAddToLibrary: () -> Unit,
-    onSave: () -> Unit,
-    onWriteReview: (Int) -> Unit
+    onToggleFavorite: () -> Unit,
+    onWriteReview: (Int) -> Unit,
+    onSaveQuote: (String, Int?, Boolean) -> Unit
 ) {
     val detail = state.detail
     Column(
@@ -172,7 +204,7 @@ private fun SuccessContent(
         ) {
             if (state.libraryStatus != null) {
                 FilledTonalButton(
-                    onClick   = { /* already in library — status change is a stretch */ },
+                    onClick   = { /* already in library — status change happens from the Library screen */ },
                     modifier  = Modifier.weight(1f)
                 ) {
                     Text(stringResource(state.libraryStatus.labelRes))
@@ -180,41 +212,39 @@ private fun SuccessContent(
             } else {
                 Button(
                     onClick  = onAddToLibrary,
-                    enabled  = !state.isAddingToLibrary,
                     modifier = Modifier.weight(1f)
                 ) {
-                    if (state.isAddingToLibrary) {
-                        CircularProgressIndicator(
-                            modifier  = Modifier.size(18.dp),
-                            strokeWidth = 2.dp,
-                            color     = MaterialTheme.colorScheme.onPrimary
-                        )
-                    } else {
-                        Text(stringResource(R.string.detail_add_want_to))
-                    }
+                    Text(stringResource(R.string.detail_add_want_to))
                 }
             }
-            OutlinedButton(
-                onClick  = { /* TODO: save */ },
-                enabled = !state.isFavorite,
-                modifier = Modifier.weight(1f)
-            ) {
-                Icon(
-                    imageVector =
-                        if (state.isFavorite)
-                            Icons.Filled.Star
-                        else
-                            Icons.Outlined.FavoriteBorder,
-                    contentDescription = null,
-                    modifier           = Modifier.size(18.dp)
-                )
-                Spacer(Modifier.width(6.dp))
-                Text(
-                    if (state.isFavorite)
-                        stringResource(R.string.saved)
-                    else
-                        stringResource(R.string.detail_save)
-                )
+
+            // Optimistic toggle — the heart flips the instant you tap it, no network wait.
+            if (state.isFavorited) {
+                FilledTonalButton(
+                    onClick  = onToggleFavorite,
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Icon(
+                        Icons.Filled.Favorite,
+                        contentDescription = null,
+                        modifier           = Modifier.size(18.dp)
+                    )
+                    Spacer(Modifier.width(6.dp))
+                    Text(stringResource(R.string.detail_saved))
+                }
+            } else {
+                OutlinedButton(
+                    onClick  = onToggleFavorite,
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Icon(
+                        Icons.Outlined.FavoriteBorder,
+                        contentDescription = null,
+                        modifier           = Modifier.size(18.dp)
+                    )
+                    Spacer(Modifier.width(6.dp))
+                    Text(stringResource(R.string.detail_save))
+                }
             }
         }
 
@@ -234,6 +264,14 @@ private fun SuccessContent(
 
         // ── Stat grid ────────────────────────────────────────────────────
         StatGrid(detail)
+
+        Spacer(Modifier.height(20.dp))
+
+        // ── Save Quote ────────────────────────────────────────────────────
+        QuoteSection(
+            mediaId = detail.id,
+            onSaveQuote = onSaveQuote
+        )
 
         Spacer(Modifier.height(20.dp))
 
@@ -482,5 +520,77 @@ private fun ReviewCard(review: Review) {
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun QuoteSection(
+    mediaId: Int,
+    onSaveQuote: (String, Int?, Boolean) -> Unit
+) {
+    var quoteText by remember { mutableStateOf("") }
+    var pageText by remember { mutableStateOf("") }
+    var isPublic by remember { mutableStateOf(false) }
+
+    SectionCaption("Save Quote")
+
+    Spacer(Modifier.height(8.dp))
+
+    OutlinedTextField(
+        value = quoteText,
+        onValueChange = {
+            if (it.length <= 500) quoteText = it
+        },
+        modifier = Modifier.fillMaxWidth(),
+        label = { Text("Quote") },
+        minLines = 3,
+        supportingText = {
+            Text("${quoteText.length}/500")
+        }
+    )
+
+    Spacer(Modifier.height(8.dp))
+
+    OutlinedTextField(
+        value = pageText,
+        onValueChange = { pageText = it.filter(Char::isDigit) },
+        modifier = Modifier.fillMaxWidth(),
+        label = { Text("Page Number (optional)") }
+    )
+
+    Spacer(Modifier.height(8.dp))
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            "Public",
+            modifier = Modifier.weight(1f)
+        )
+
+        Switch(
+            checked = isPublic,
+            onCheckedChange = { isPublic = it }
+        )
+    }
+
+    Spacer(Modifier.height(12.dp))
+
+    Button(
+        onClick = {
+            onSaveQuote(
+                quoteText.trim(),
+                pageText.toIntOrNull(),
+                isPublic
+            )
+
+            quoteText = ""
+            pageText = ""
+            isPublic = false
+        },
+        enabled = quoteText.isNotBlank(),
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Text("Save Quote")
     }
 }

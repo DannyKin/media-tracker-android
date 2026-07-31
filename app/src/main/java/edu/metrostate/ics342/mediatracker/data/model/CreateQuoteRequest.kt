@@ -3,9 +3,9 @@ package edu.metrostate.ics342.mediatracker.data.model
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Favorite(
-    val userId: Int,
+data class CreateQuoteRequest(
     val mediaId: Int,
-    val createdAt: String,
-    val media: Media? = null
+    val quoteText: String,
+    val pageNumber: Int? = null,
+    val isPublic: Boolean
 )
