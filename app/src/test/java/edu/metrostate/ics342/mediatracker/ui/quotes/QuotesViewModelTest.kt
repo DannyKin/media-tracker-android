@@ -1,6 +1,7 @@
 package edu.metrostate.ics342.mediatracker.ui.quotes
 
 import edu.metrostate.ics342.mediatracker.data.model.CreateQuoteRequest
+import edu.metrostate.ics342.mediatracker.data.network.FakeQuoteRepository
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.advanceUntilIdle
 import org.junit.Assert.assertEquals

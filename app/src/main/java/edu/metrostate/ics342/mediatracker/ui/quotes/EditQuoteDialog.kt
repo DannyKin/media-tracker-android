@@ -64,6 +64,7 @@ fun EditQuoteDialog(
                             isPublic = quote.isPublic
                         )
                     )
+                    onDismiss()
                 }
             ) {
                 Text("Save")

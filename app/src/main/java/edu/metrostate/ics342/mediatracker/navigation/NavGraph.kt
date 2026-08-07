@@ -1,18 +1,21 @@
 package edu.metrostate.ics342.mediatracker.navigation
 
 import android.net.Uri
+import edu.metrostate.ics342.mediatracker.ui.quotes.QuotesScreen
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
-//import edu.metrostate.ics342.mediatracker.data.UserRepository
+import edu.metrostate.ics342.mediatracker.data.network.FakeQuoteRepository
+import androidx.compose.runtime.remember
 import edu.metrostate.ics342.mediatracker.ui.activity.ActivityFeedScreen
 import edu.metrostate.ics342.mediatracker.ui.auth.LoginScreen
 import edu.metrostate.ics342.mediatracker.ui.auth.RegisterScreen
@@ -22,6 +25,8 @@ import edu.metrostate.ics342.mediatracker.ui.library.LibraryScreen
 import edu.metrostate.ics342.mediatracker.ui.profile.EditProfileScreen
 import edu.metrostate.ics342.mediatracker.ui.profile.MyProfileScreen
 import edu.metrostate.ics342.mediatracker.ui.profile.UserProfileScreen
+import edu.metrostate.ics342.mediatracker.ui.quotes.QuotesViewModel
+import edu.metrostate.ics342.mediatracker.ui.quotes.QuotesViewModelFactory
 import edu.metrostate.ics342.mediatracker.ui.review.WriteReviewScreen
 import edu.metrostate.ics342.mediatracker.ui.search.SearchResultsScreen
 import edu.metrostate.ics342.mediatracker.ui.search.SearchScreen
@@ -32,6 +37,7 @@ private val bottomNavRoutes = setOf(
     Routes.SEARCH,
     Routes.SEARCH_RESULTS,
     Routes.LIBRARY,
+    Routes.QUOTES,
     Routes.CONNECTIONS,
     Routes.MY_PROFILE,
 )
@@ -117,6 +123,27 @@ fun MediaTrackerNavGraph(navController: NavHostController) {
             composable(Routes.LIBRARY) {
                 LibraryScreen(
                     onMediaClick = { mediaId -> navController.navigate("media_detail/$mediaId") }
+                )
+            }
+
+            composable(Routes.QUOTES) {
+
+                val repository = remember {
+                    FakeQuoteRepository()
+                }
+
+                val factory = remember {
+                    QuotesViewModelFactory(
+                        repository = repository
+                    )
+                }
+
+                val quoteViewModel: QuotesViewModel = viewModel(
+                    factory = factory
+                )
+
+                QuotesScreen(
+                    viewModel = quoteViewModel
                 )
             }
 

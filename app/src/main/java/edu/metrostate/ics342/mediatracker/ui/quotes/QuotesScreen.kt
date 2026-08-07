@@ -7,7 +7,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,12 +19,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.unit.dp
 import edu.metrostate.ics342.mediatracker.data.model.Quote
 
-
-
 @Composable
 fun QuotesScreen(
-    viewModel: QuotesViewModel = viewModel()
+    viewModel: QuotesViewModel
 ) {
+
+
     val quotes by viewModel.quotes.collectAsState()
     val loading by viewModel.loading.collectAsState()
     val error by viewModel.error.collectAsState()
@@ -39,7 +38,7 @@ fun QuotesScreen(
     }
 
     LaunchedEffect(Unit) {
-        viewModel.loadQuotes()
+        viewModel.loadPublicQuotes()
     }
 
     when {
@@ -106,7 +105,6 @@ fun QuotesScreen(
                     id = quote.id,
                     request = request
                 )
-
                 selectedQuote = null
             }
         )

@@ -1,10 +1,9 @@
-package edu.metrostate.ics342.mediatracker.ui.quotes
+package edu.metrostate.ics342.mediatracker.data.network
 
 import edu.metrostate.ics342.mediatracker.data.model.CreateQuoteRequest
 import edu.metrostate.ics342.mediatracker.data.model.Media
 import edu.metrostate.ics342.mediatracker.data.model.MediaType
 import edu.metrostate.ics342.mediatracker.data.model.Quote
-import edu.metrostate.ics342.mediatracker.data.network.MediaRepository
 
 class FakeQuoteRepository : MediaRepository {
 
