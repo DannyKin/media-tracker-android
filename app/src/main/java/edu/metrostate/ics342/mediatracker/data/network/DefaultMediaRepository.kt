@@ -1,6 +1,7 @@
 package edu.metrostate.ics342.mediatracker.data.network
 
 import edu.metrostate.ics342.mediatracker.data.SessionRepository
+import edu.metrostate.ics342.mediatracker.data.model.AlreadyLikedException
 import edu.metrostate.ics342.mediatracker.data.model.DuplicateFavoriteException
 import edu.metrostate.ics342.mediatracker.data.model.DuplicateLibraryException
 import edu.metrostate.ics342.mediatracker.data.model.ErrorResponse
@@ -27,7 +28,7 @@ data class LibraryPage(
     val hasMore: Boolean
 )
 
-class DefaultMediaRepository(sessionRepository: SessionRepository) {
+class DefaultMediaRepository(sessionRepository: SessionRepository): MediaRepository {
 
     private val api = RetrofitInstance.mediaApiService(sessionRepository)
 
@@ -145,7 +146,7 @@ class DefaultMediaRepository(sessionRepository: SessionRepository) {
         return response.body() ?: emptyList()
     }
 
-    suspend fun createQuote(request: CreateQuoteRequest): Quote {
+    override suspend fun createQuote(request: CreateQuoteRequest): Quote {
         val response = api.createQuote(request)
 
         if (!response.isSuccessful) {
@@ -157,7 +158,7 @@ class DefaultMediaRepository(sessionRepository: SessionRepository) {
         return response.body() ?: error("Empty body creating quote")
     }
 
-    suspend fun getQuotes(): List<Quote> {
+    override suspend fun getQuotes(): List<Quote> {
         val response = api.getQuotes()
 
         if (!response.isSuccessful) {
@@ -168,4 +169,61 @@ class DefaultMediaRepository(sessionRepository: SessionRepository) {
 
         return response.body() ?: emptyList()
     }
+
+    override suspend fun updateQuote(id: Int, request: CreateQuoteRequest): Quote {
+        val response = api.updateQuote(id, request)
+
+        if (!response.isSuccessful) {
+            val message = parseErrorMessage(response)
+                ?: "Failed to update quote (${response.code()})"
+            error(message)
+        }
+
+        return response.body() ?: error("Empty body updating quote")
+    }
+
+    override suspend fun deleteQuote(id: Int) {
+        val response = api.deleteQuote(id)
+
+        if (!response.isSuccessful) {
+            val message = parseErrorMessage(response)
+                ?: "Failed to delete quote (${response.code()})"
+            error(message)
+        }
+    }
+
+    override suspend fun getPublicQuotes(): List<Quote> {
+        val response = api.getPublicQuotes()
+
+        if (!response.isSuccessful) {
+            val message = parseErrorMessage(response)
+                ?: "Failed to load public quotes (${response.code()})"
+            error(message)
+        }
+
+        return response.body() ?: emptyList()
+    }
+
+    override suspend fun unlikeQuote(id: Int) {
+        val response = api.unlikeQuote(id)
+
+        if (!response.isSuccessful) {
+            val message = parseErrorMessage(response)
+                ?: "Failed to unlike quote (${response.code()})"
+            error(message)
+        }
+    }
+
+    override suspend fun likeQuote(id: Int) {
+        val response = api.likeQuote(id)
+
+        if (response.code() == 409) {
+            throw AlreadyLikedException()
+        }
+
+        if (!response.isSuccessful) {
+            error("Failed to like quote")
+        }
+    }
+
 }
