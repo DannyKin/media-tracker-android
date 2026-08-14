@@ -40,21 +40,6 @@ class QuotesViewModel(
         }
     }
 
-    fun loadQuotes() {
-        viewModelScope.launch {
-            _loading.value = true
-            _error.value = null
-
-            try {
-                _quotes.value = repository.getQuotes()
-            } catch (e: Exception) {
-                _error.value = e.message ?: "Couldn't load quotes."
-            } finally {
-                _loading.value = false
-            }
-        }
-    }
-
     fun loadPublicQuotes() {
         viewModelScope.launch {
             _loading.value = true

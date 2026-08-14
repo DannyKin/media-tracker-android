@@ -19,7 +19,7 @@ fun QuoteCard(
     onEdit: (() -> Unit)? = null,
     onDelete: (() -> Unit)? = null,
     onLikeToggle: (() -> Unit)? = null,
-    liked: Boolean = false
+    liked: Boolean
 ) {
 
     Card(

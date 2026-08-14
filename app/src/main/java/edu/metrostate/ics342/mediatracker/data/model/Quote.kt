@@ -11,6 +11,7 @@ data class Quote(
     val pageNumber: Int? = null,
     val isPublic: Boolean,
     val likeCount: Int,
+    val isLiked: Boolean,
     val createdAt: String,
     val media: Media
 )

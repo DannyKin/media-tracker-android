@@ -72,9 +72,14 @@ fun QuotesScreen(
 
                     QuoteCard(
                         quote = quote,
+                        liked = quote.isLiked,
 
                         onLikeToggle = {
-                            viewModel.likeQuote(quote.id)
+                            if (quote.isLiked) {
+                                viewModel.unlikeQuote(quote.id)
+                            } else {
+                                viewModel.likeQuote(quote.id)
+                            }
                         },
 
                         onEdit = {
